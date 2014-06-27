@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-06-25T08:57:38Z" product-name="liquid">
+		<header/>
+		<body>
+			<trans-unit id="tx_liquid_domain_model_liquid">
+				<source>Liquid</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

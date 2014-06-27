@@ -1,0 +1,34 @@
+# Clear out any constants in this reserved room!
+liquid.content >
+
+# get content
+liquid.content.get = CONTENT
+liquid.content.get {
+    table = tt_content
+    select.orderBy = sorting
+    select.where = colPos=0
+    select.languageField = sys_language_uid
+}
+
+lib.liquid.basic = USER
+lib.liquid.basic {
+    userFunc = TYPO3\\CMS\\Extbase\\Core\\Bootstrap->run
+    extensionName = Liquid
+    pluginName = ContentElement
+    vendorName = Sudomake
+}
+
+#**********************************
+# tt_content is started
+#**********************************
+tt_content >
+tt_content = CASE
+tt_content.key.field = CType
+
+# *****************
+# CType: header
+# *****************
+tt_content.header = COA
+tt_content.header {
+    10 < lib.liquid.basic
+}
