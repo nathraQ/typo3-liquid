@@ -32,3 +32,93 @@ tt_content.header = COA
 tt_content.header {
     10 < lib.liquid.basic
 }
+
+# *****************
+# CType: text
+# *****************
+tt_content.text = COA
+tt_content.text {
+    10 < lib.liquid.basic
+}
+
+# *****************
+# CType: image
+# *****************
+# (also used for rendering 'textpic' type):
+tt_content.image = COA
+tt_content.image {
+    10 < lib.liquid.basic
+}
+
+# *****************
+# CType: textpic
+# *****************
+tt_content.textpic = COA
+tt_content.textpic {
+    10 < lib.liquid.basic
+}
+
+# *****************
+# CType: uploads
+# *****************
+tt_content.uploads = COA
+tt_content.uploads {
+    10 < lib.liquid.basic
+}
+
+# *****************
+# CType: table
+# *****************
+tt_content.table = COA
+tt_content.table {
+    10 < lib.liquid.basic
+}
+
+# *****************
+# CType: media
+# *****************
+tt_content.media = COA
+tt_content.media {
+    10 < lib.liquid.basic
+}
+
+# ******************
+# CType: mailform
+# ******************
+tt_content.mailform = COA
+tt_content.mailform {
+    10 < lib.liquid.basic
+}
+
+# ******************
+# CType: search
+# ******************
+tt_content.search = COA
+tt_content.search {
+    10 < lib.liquid.basic
+}
+
+# ****************
+# CType: menu
+# ****************
+tt_content.menu = COA
+tt_content.menu {
+    10 < lib.liquid.basic
+}
+
+# ****************
+# CType: shortcut
+# ****************
+tt_content.shortcut = COA
+tt_content.shortcut {
+    10 < lib.liquid.basic
+}
+
+# ****************
+# CType: list
+# ****************
+tt_content.list = COA
+tt_content.list {
+    10 < lib.liquid.basic
+}
+
