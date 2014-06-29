@@ -26,7 +26,6 @@ namespace Sudomake\Liquid\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use Sudomake\Liquid\Utility\ContentManager;
 
 /**
  * LiquidController
@@ -55,24 +54,16 @@ class LiquidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
     protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
         if($view instanceof \TYPO3\CMS\Fluid\View\TemplateView) {
-            if($this->contentService->hasOwnTemplate()) {
-                $view->setTemplatePathAndFilename($this->contentService->getTemplatePathAndFilename());
-            }
-            if($this->contentService->hasOwnLayoutRootPaths()) {
-                $view->setLayoutRootPaths($this->contentService->getLayoutRootPaths());
-            }
-            if($this->contentService->hasOwnTemplateRootPaths()) {
-                $view->setTemplateRootPaths($this->contentService->getTemplateRootPaths());
-            }
-            if($this->contentService->hasOwnPartialRootPaths()) {
+            if($this->contentService->hasPartialRootPaths()) {
                 $view->setPartialRootPaths($this->contentService->getPartialRootPaths());
             }
-
-
+            $this->contentService->resolveTemplatePathAndFilename($view);
+            $this->contentService->resolveFrameForLayoutPathAndFilename($view);
         }
 
+        \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($this->settings, $this->contentService->getContentSettings());
+        $view->assign('settings', $this->settings);
         $view->assign('contentObject', $this->contentObject->data);
-        $view->assign('customSettings', $this->contentService->getContentSettings());
     }
 
     protected function initializeAction() {
@@ -85,7 +76,6 @@ class LiquidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	* @return void
 	 */
 	public function showAction() {
-
 	}
 
 }

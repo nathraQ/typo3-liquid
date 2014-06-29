@@ -78,7 +78,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         $this->typoScriptService = $typoScriptService;
     }
 
-    public function hasOwnView() {
+    public function hasViewSetup() {
         $this->getContentTypoScript();
         if (array_key_exists('view' ,$this->contentTypoScriptSetup)) {
             return true;
@@ -87,9 +87,9 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         }
     }
 
-    public function hasOwnTemplate() {
+    public function hasTemplate() {
         $this->getContentTypoScript();
-        if ($this->hasOwnView() && array_key_exists('template' ,$this->contentTypoScriptSetup['view'])) {
+        if ($this->hasViewSetup() && array_key_exists('template' ,$this->contentTypoScriptSetup['view'])) {
             return true;
         } else {
             return false;
@@ -97,35 +97,34 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
     }
 
 
-    public function hasOwnTemplateRootPaths() {
+    public function hasTemplateRootPaths() {
         $this->getContentTypoScript();
-        if ($this->hasOwnView() && array_key_exists('templateRootPath' ,$this->contentTypoScriptSetup['view'])) {
+        if ($this->hasViewSetup() && array_key_exists('templateRootPath' ,$this->contentTypoScriptSetup['view'])) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function hasOwnLayoutRootPaths() {
+    public function hasLayoutRootPaths() {
         $this->getContentTypoScript();
-        if ($this->hasOwnView() && array_key_exists('layoutRootPath' ,$this->contentTypoScriptSetup['view'])) {
+        if ($this->hasViewSetup() && array_key_exists('layoutRootPath' ,$this->contentTypoScriptSetup['view'])) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function hasOwnPartialRootPaths() {
+    public function hasPartialRootPaths() {
         $this->getContentTypoScript();
-        if ($this->hasOwnView() && array_key_exists('partialRootPath' ,$this->contentTypoScriptSetup['view'])) {
+        if ($this->hasViewSetup() && array_key_exists('partialRootPath' ,$this->contentTypoScriptSetup['view'])) {
             return true;
         } else {
             return false;
         }
     }
 
-
-    public function hasOwnSettings() {
+    public function hasSettings() {
         $this->getContentTypoScript();
         if (array_key_exists('settings' ,$this->contentTypoScriptSetup)) {
             return true;
@@ -134,8 +133,38 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         }
     }
 
+    public function hasFrame() {
+        if(isset($this->contentObject->data['section_frame']) && intval($this->contentObject->data['section_frame']) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function resolveFrameForLayoutPathAndFilename(\TYPO3\CMS\Fluid\View\TemplateView $view) {
+        if($this->hasFrame()) {
+            // resolve layoutPathAndFilename by frame number
+            $filename = $this->getFilenameByFrameNumber();
+            // search in all possible rootPaths for $filename
+
+        } elseif($this->hasLayoutRootPaths()) {
+            // check if custom layoutpaths are set
+            $view->setLayoutRootPaths($this->getLayoutRootPaths());
+        }
+    }
+
+    public function resolveTemplatePathAndFilename(\TYPO3\CMS\Fluid\View\TemplateView $view) {
+        if($this->hasTemplate()) {
+            $view->setTemplatePathAndFilename($this->getTemplatePathAndFilename());
+        } else {
+            // get filename by CType
+
+            // find filename in all possible rootPaths
+        }
+    }
+
     public function getContentSettings() {
-        if($this->hasOwnSettings()) {
+        if($this->hasSettings()) {
             return $this->contentTypoScriptSetup['settings'];
         } else {
             return array();
@@ -143,7 +172,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
     }
 
     public function getTemplateRootPaths() {
-        if($this->hasOwnTemplateRootPaths()) {
+        if($this->hasTemplateRootPaths()) {
             $rootPath = $this->contentTypoScriptSetup['view']['templateRootPath'];
             if(!is_array($rootPath)) {
                 array($rootPath);
@@ -155,7 +184,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
     }
 
     public function getLayoutRootPaths() {
-        if($this->hasOwnLayoutRootPaths()) {
+        if($this->hasLayoutRootPaths()) {
             $rootPath = $this->contentTypoScriptSetup['view']['layoutRootPath'];
             if(!is_array($rootPath)) {
                 array($rootPath);
@@ -167,7 +196,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
     }
 
     public function getPartialRootPaths() {
-        if($this->hasOwnPartialRootPaths()) {
+        if($this->hasPartialRootPaths()) {
             $rootPath = $this->contentTypoScriptSetup['view']['partialRootPath'];
             if(!is_array($rootPath)) {
                 array($rootPath);
@@ -180,7 +209,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
 
     public function getTemplatePathAndFilename() {
-        if($this->hasOwnTemplate()) {
+        if($this->hasTemplate()) {
             return $this->contentTypoScriptSetup['view']['template'];
         } else {
             // throw exception
