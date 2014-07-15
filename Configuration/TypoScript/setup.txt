@@ -1,3 +1,8 @@
+liquid.frames {
+    0 = Default
+    1 = Foo
+}
+
 # Clear out any constants in this reserved room!
 liquid.content >
 
@@ -12,7 +17,7 @@ liquid.content.get {
 
 lib.liquid.basic = USER
 lib.liquid.basic {
-    userFunc = TYPO3\\CMS\\Extbase\\Core\\Bootstrap->run
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = Liquid
     pluginName = ContentElement
     vendorName = Sudomake
@@ -21,7 +26,7 @@ lib.liquid.basic {
 #**********************************
 # tt_content is started
 #**********************************
-tt_content >
+# tt_content >
 tt_content = CASE
 tt_content.key.field = CType
 

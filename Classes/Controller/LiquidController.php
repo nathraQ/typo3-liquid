@@ -26,9 +26,10 @@ namespace Sudomake\Liquid\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\DebugUtility;
 
 /**
- * LiquidController
+ * Liquid
  */
 class LiquidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
@@ -53,15 +54,11 @@ class LiquidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     }
 
     protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
-        if($view instanceof \TYPO3\CMS\Fluid\View\TemplateView) {
-            if($this->contentService->hasPartialRootPaths()) {
-                $view->setPartialRootPaths($this->contentService->getPartialRootPaths());
-            }
-            $this->contentService->resolveTemplatePathAndFilename($view);
-            $this->contentService->resolveFrameForLayoutPathAndFilename($view);
+        if(!empty($this->settings)) {
+            \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($this->settings, $this->contentService->getContentSettings());
+        } else {
+            $this->settings = $this->contentService->getContentSettings();
         }
-
-        \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($this->settings, $this->contentService->getContentSettings());
         $view->assign('settings', $this->settings);
         $view->assign('contentObject', $this->contentObject->data);
     }
@@ -76,6 +73,8 @@ class LiquidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	* @return void
 	 */
 	public function showAction() {
+        DebugUtility::debug('foo show');
+        return $this->view->render($this->contentObject->data['CType']);
 	}
 
 }

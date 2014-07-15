@@ -25,7 +25,7 @@ namespace Sudomake\Liquid\Tests\Unit\Controller;
  ***************************************************************/
 
 /**
- * Test case for class Sudomake\Liquid\Controller\LiquidController.
+ * Test case for class Sudomake\Liquid\Controller\Liquid.
  *
  * @author Martin Sonnenholzer <martin.sonnenholzer@googlemail.com>
  */
@@ -37,7 +37,7 @@ class LiquidControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase {
 	protected $subject;
 
 	protected function setUp() {
-		$this->subject = $this->getMock('Sudomake\\Liquid\\Controller\\LiquidController', array('redirect', 'forward', 'addFlashMessage'), array(), '', FALSE);
+		$this->subject = $this->getMock('Sudomake\\Liquid\\Controller\\Liquid', array('redirect', 'forward', 'addFlashMessage'), array(), '', FALSE);
 	}
 
 	protected function tearDown() {

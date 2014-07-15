@@ -87,7 +87,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         }
     }
 
-    public function hasTemplate() {
+    public function hasTemplatePathAndFilename() {
         $this->getContentTypoScript();
         if ($this->hasViewSetup() && array_key_exists('template' ,$this->contentTypoScriptSetup['view'])) {
             return true;
@@ -133,7 +133,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         }
     }
 
-    public function hasFrame() {
+    public function hasLayoutName() {
         if(isset($this->contentObject->data['section_frame']) && intval($this->contentObject->data['section_frame']) > 0) {
             return true;
         } else {
@@ -141,25 +141,11 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         }
     }
 
-    public function resolveFrameForLayoutPathAndFilename(\TYPO3\CMS\Fluid\View\TemplateView $view) {
-        if($this->hasFrame()) {
+    public function getLayoutName() {
+        if($this->hasLayoutName()) {
             // resolve layoutPathAndFilename by frame number
-            $filename = $this->getFilenameByFrameNumber();
-            // search in all possible rootPaths for $filename
-
-        } elseif($this->hasLayoutRootPaths()) {
-            // check if custom layoutpaths are set
-            $view->setLayoutRootPaths($this->getLayoutRootPaths());
-        }
-    }
-
-    public function resolveTemplatePathAndFilename(\TYPO3\CMS\Fluid\View\TemplateView $view) {
-        if($this->hasTemplate()) {
-            $view->setTemplatePathAndFilename($this->getTemplatePathAndFilename());
-        } else {
-            // get filename by CType
-
-            // find filename in all possible rootPaths
+            $layoutName = $this->getLayoutNameByFrameNumber(intval($this->contentObject->data['section_frame']));
+            return $layoutName;
         }
     }
 
@@ -209,7 +195,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
 
     public function getTemplatePathAndFilename() {
-        if($this->hasTemplate()) {
+        if($this->hasTemplatePathAndFilename()) {
             return $this->contentTypoScriptSetup['view']['template'];
         } else {
             // throw exception
@@ -231,5 +217,12 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         return $this->contentTypoScriptSetup;
     }
 
-
+    protected function getLayoutNameByFrameNumber($frameNumber) {
+        $layoutName = 'Default';
+        $this->getTypoScript();
+        if(isset($this->typoScriptSetup['liquid']['frames'][$frameNumber]) && $this->typoScriptSetup['liquid']['frames'][$frameNumber] != '') {
+            $layoutName = $this->typoScriptSetup['liquid']['frames'][$frameNumber];
+        }
+        return $layoutName;
+    }
 }
