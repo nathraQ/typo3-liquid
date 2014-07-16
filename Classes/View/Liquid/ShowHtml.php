@@ -16,11 +16,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Fluid\View\Exception;
 
-/**
- * The main template view. Should be used as view if you want Fluid Templating
- *
- * @api
- */
 class ShowHtml extends \TYPO3\CMS\Fluid\View\TemplateView {
 
     /**
@@ -62,7 +57,7 @@ class ShowHtml extends \TYPO3\CMS\Fluid\View\TemplateView {
 
     protected function getLayoutPathAndFilename($layoutName = 'Default') {
         if($this->contentService->hasLayoutName()) {
-            $layoutName =  $this->contentService->getLayoutName();
+            $layoutName = $this->contentService->getLayoutName();
         }
         if ($this->layoutPathAndFilename !== NULL) {
             return $this->layoutPathAndFilename;
