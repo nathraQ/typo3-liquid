@@ -41,6 +41,11 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
     protected $typoScriptSetup;
 
     /**
+     * @var array The liquid configuration
+     */
+    protected $liquidTypoScriptSetup;
+
+    /**
      * @var array The configuration
      */
     protected $contentTypoScriptSetup;
@@ -87,6 +92,15 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         }
     }
 
+    public function hasTcaSetup() {
+        $this->getContentTypoScript();
+        if (array_key_exists('tca' ,$this->contentTypoScriptSetup)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function hasTemplatePathAndFilename() {
         $this->getContentTypoScript();
         if ($this->hasViewSetup() && array_key_exists('template' ,$this->contentTypoScriptSetup['view'])) {
@@ -99,7 +113,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
     public function hasTemplateRootPaths() {
         $this->getContentTypoScript();
-        if ($this->hasViewSetup() && array_key_exists('templateRootPath' ,$this->contentTypoScriptSetup['view'])) {
+        if ($this->hasViewSetup() && array_key_exists('templateRootPaths' ,$this->contentTypoScriptSetup['view'])) {
             return true;
         } else {
             return false;
@@ -108,7 +122,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
     public function hasLayoutRootPaths() {
         $this->getContentTypoScript();
-        if ($this->hasViewSetup() && array_key_exists('layoutRootPath' ,$this->contentTypoScriptSetup['view'])) {
+        if ($this->hasViewSetup() && array_key_exists('layoutRootPaths' ,$this->contentTypoScriptSetup['view'])) {
             return true;
         } else {
             return false;
@@ -117,7 +131,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
     public function hasPartialRootPaths() {
         $this->getContentTypoScript();
-        if ($this->hasViewSetup() && array_key_exists('partialRootPath' ,$this->contentTypoScriptSetup['view'])) {
+        if ($this->hasViewSetup() && array_key_exists('partialRootPaths' ,$this->contentTypoScriptSetup['view']) && !empty($this->contentTypoScriptSetup['view']['partialRootPaths'])) {
             return true;
         } else {
             return false;
@@ -126,7 +140,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
     public function hasSettings() {
         $this->getContentTypoScript();
-        if (array_key_exists('settings' ,$this->contentTypoScriptSetup)) {
+        if (array_key_exists('settings' ,$this->contentTypoScriptSetup) && !empty($this->contentTypoScriptSetup['settings'])) {
             return true;
         } else {
             return false;
@@ -159,7 +173,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
     public function getTemplateRootPaths() {
         if($this->hasTemplateRootPaths()) {
-            $rootPath = $this->contentTypoScriptSetup['view']['templateRootPath'];
+            $rootPath = $this->contentTypoScriptSetup['view']['templateRootPaths'];
             if(!is_array($rootPath)) {
                 array($rootPath);
             }
@@ -171,7 +185,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
     public function getLayoutRootPaths() {
         if($this->hasLayoutRootPaths()) {
-            $rootPath = $this->contentTypoScriptSetup['view']['layoutRootPath'];
+            $rootPath = $this->contentTypoScriptSetup['view']['layoutRootPaths'];
             if(!is_array($rootPath)) {
                 array($rootPath);
             }
@@ -183,7 +197,7 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
     public function getPartialRootPaths() {
         if($this->hasPartialRootPaths()) {
-            $rootPath = $this->contentTypoScriptSetup['view']['partialRootPath'];
+            $rootPath = $this->contentTypoScriptSetup['view']['partialRootPaths'];
             if(!is_array($rootPath)) {
                 array($rootPath);
             }
@@ -217,12 +231,35 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
         return $this->contentTypoScriptSetup;
     }
 
-    protected function getLayoutNameByFrameNumber($frameNumber) {
-        $layoutName = 'Default';
-        $this->getTypoScript();
-        if(isset($this->typoScriptSetup['liquid']['frames'][$frameNumber]) && $this->typoScriptSetup['liquid']['frames'][$frameNumber] != '') {
-            $layoutName = $this->typoScriptSetup['liquid']['frames'][$frameNumber];
+    public function getLiquidTypoScript() {
+        if(empty($this->liquidTypoScriptSetup)) {
+            $this->getTypoScript();
+            $this->liquidTypoScriptSetup = $this->typoScriptSetup['liquid'];
         }
-        return $layoutName;
+        return $this->liquidTypoScriptSetup;
+
+    }
+
+    public function getLiquidValueByKey($type, $key){
+        $this->getLiquidTypoScript();
+       if(
+           array_key_exists($type,$this->liquidTypoScriptSetup)
+           && !empty($this->liquidTypoScriptSetup[$type])
+           && array_key_exists($key,$this->liquidTypoScriptSetup[$type])
+           && isset($this->liquidTypoScriptSetup[$type][$key])
+       ) {
+           return $this->liquidTypoScriptSetup[$type][$key];
+       } else {
+           return NULL;
+       }
+    }
+
+    protected function getLayoutNameByFrameNumber($frameNumber) {
+        $layoutName = $this->getLiquidValueByKey('frames', $frameNumber);
+        if($layoutName !== NULL) {
+            return $layoutName;
+        } else {
+            return 'Default';
+        }
     }
 }
