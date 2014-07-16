@@ -73,7 +73,6 @@ class LiquidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	* @return void
 	 */
 	public function showAction() {
-        DebugUtility::debug('foo show');
         return $this->view->render($this->contentObject->data['CType']);
 	}
 
