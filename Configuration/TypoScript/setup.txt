@@ -1,6 +1,25 @@
+#<INCLUDE_TYPOSCRIPT: source="FILE:EXT:liquid/Configuration/TypoScript/ParseFunc/setup.txt">
 liquid.frames {
     0 = Default
-    1 = Foo
+    1 = Invisible
+    5 = LineBefore
+    6 = LineAfter
+    10 = Indent
+    11 = IndentLeft
+    12 = IndetRight
+    20 = FrameOne
+    21 = FrameTwo
+    66 = Default
+}
+
+liquid.header_layout {
+    0 =
+    1 = header-layout1
+    2 = header-layout2
+    3 = header-layout3
+    4 = header-layout4
+    5 = header-layout5
+    100 = hide
 }
 
 # Clear out any constants in this reserved room!
@@ -21,6 +40,18 @@ lib.liquid.basic {
     extensionName = Liquid
     pluginName = ContentElement
     vendorName = Sudomake
+    #view {
+    #    template =
+    #    templateRootPaths =
+    #    layoutRootPaths =
+    #    partialRootPaths =
+    #}
+    #settings {
+    #
+    #}
+    #tca {
+    #
+    #}
 }
 
 #**********************************
