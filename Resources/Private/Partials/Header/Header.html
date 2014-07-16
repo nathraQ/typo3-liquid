@@ -1,0 +1,16 @@
+{namespace l=Sudomake\Liquid\ViewHelpers}
+<div class="header {contentObject.header_position} {l:layout.class(type: 'header_layout', key: contentObject.header_layout)}">
+    <h2>
+        <f:if condition="{contentObject.header_link}">
+            <f:then>
+                <a>{contentObject.header}</a>
+            </f:then>
+            <f:else>
+                {contentObject.header}
+            </f:else>
+        </f:if>
+    </h2>
+    <f:if condition="{contentObject.subheader}">
+        <h3>{contentObject.subheader}</h3>
+    </f:if>
+</div>
