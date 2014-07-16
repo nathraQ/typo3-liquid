@@ -124,6 +124,7 @@ tt_content.shortcut {
 # ****************
 tt_content.list = COA
 tt_content.list {
-    10 < lib.liquid.basic
+    20 = CASE
+    20.key.field = list_type
 }
 
